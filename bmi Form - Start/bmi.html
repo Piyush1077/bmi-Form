@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Notes 
+
+  BMI Fomula in this site: https://www.cdc.gov/healthyweight/assessing/bmi/childrens_bmi/childrens_bmi_formula.html
+Age is irrelevant 
+
+-->
+
+<head>
+    <link rel="stylesheet" href="bmi.css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>BMI checker</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="header">
+        <div class="wrapper">
+          <form>
+            <h1>BMI calculator</h1>
+            <p>Insert Your Age</p>
+            <input type="text" id="age">
+            <p>Insert Weight in Kg</p>
+            <input type="text" id="weight">
+            <br>
+            <p>Insert Height in cm</p>
+            <input type="text" id="height">
+            <br>
+            <button id="calc">check</button>
+            <p id="result"></p>
+          </form>
+        </div>
+    </div>
+<script>
+$(document).ready(function(){
+	//$("#calc").click(function(){
+	$("form").submit(function(e){
+	e.preventDefault();
+    var age = $("#age").val();
+	var weight = $("#weight").val();
+	var height = $("#height").val();
+	/*$.post("/calculate", {"age": age,"weight":weight,"height":height}, function(result){
+		alert("done");
+      $("#result").html(result);
+    });*/
+	$.ajax('http://localhost:3000/calculate', {
+    type: 'POST',  
+    data: {"age": age,"weight":weight,"height":height}, 
+    success: function (data, status, xhr) {       
+		while($("#result").html()===""){
+			$("#result").html("<h2>"+data+"</h2>");
+		}
+    },
+    error: function (jqXhr, textStatus, errorMessage) {
+			alert("erroe");
+            $("#result").html('Error-' + errorMessage);
+    }
+});
+  });
+});
+</script>
+ 
+</body>
+
+</html>
